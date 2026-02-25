@@ -1,0 +1,17 @@
+{
+  "name": "DITHER/ErrorDiffusion/FloydSteinberg",
+  "author": "JaimELegor",
+  "version": "1.0.0",
+  "description": "",
+  "params": {
+    "levels": {
+      "value": 1,
+      "min": 0.5,
+      "max": 3,
+      "step": 0.1
+    }
+  },
+  "processFunc": "(img, r, g, b, a, x, y, value) => {\n    const quantize = (v) => Math.round(value * v / 255) * (255 / value);\n    const index = (x, y) => 4 * (x + y * img.width);\n\n    function dither(errR, errG, errB, arr, i, portion) {\n      arr[i] = (arr[i] + errR * portion);\n      arr[i + 1] = (arr[i + 1] + errG * portion);\n      arr[i + 2] = (arr[i + 2] + errB * portion);\n    }\n\n    let newR = quantize(r);\n    let newG = quantize(g);\n    let newB = quantize(b);\n\n    img.pixels[index(x, y)] = newR;\n    img.pixels[index(x, y) + 1] = newG;\n    img.pixels[index(x, y) + 2] = newB;\n\n    const errR = r - newR;\n    const errG = g - newG;\n    const errB = b - newB;\n\n    dither(errR, errG, errB, img.pixels, index(x + 1, y), 7 / 16);\n    dither(errR, errG, errB, img.pixels, index(x - 1, y + 1), 3 / 16);\n    dither(errR, errG, errB, img.pixels, index(x, y + 1), 5 / 16);\n    dither(errR, errG, errB, img.pixels, index(x + 1, y + 1), 1 / 16);\n  }",
+  "shader": "precision mediump float;\nuniform sampler2D tex;\nuniform vec2 resolution;\nuniform float levels;\nvarying vec2 vTexCoord;\n\nfloat quantize(float v, float l) {\n  return floor(v * l) / l;\n}\n\nvoid main() {\n  vec4 color = texture2D(tex, vTexCoord);\n  float l = levels;\n  vec3 c = vec3(\n    quantize(color.r, l),\n    quantize(color.g, l),\n    quantize(color.b, l)\n  );\n  gl_FragColor = vec4(c, color.a);\n}",
+  "createdAt": "2026-02-25T19:08:17.437Z"
+}
