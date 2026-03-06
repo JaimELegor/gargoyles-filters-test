@@ -28,15 +28,6 @@
       "json": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/dither/errordiffusion/atkinson.json"
     },
     {
-      "id": "dither/errordiffusion/atkinson/atkinson",
-      "name": "DITHER/ErrorDiffusion/Atkinson",
-      "author": "JaimELegor",
-      "version": "1.0.0",
-      "description": "Applies Atkinson Dithering to the image, reducing it to a limited palette\nwhile preserving perceived detail through error diffusion.\n\nAtkinson Dithering, developed by Bill Atkinson for the original Macintosh,\ndiffuses 3/4 of the quantization error across 6 neighboring pixels (rather\nthan the full error like Floyd-Steinberg). This produces a higher-contrast,\nslightly grainier result with stronger dark/light separation — characteristic\nof classic 1-bit Mac graphics.\n\nAdjust `threshold` to control the black/white cutoff point, and `strength`\nto control how aggressively the error is diffused across neighbors.",
-      "thumbnail": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/dither/errordiffusion/atkinson/atkinson-thumbnail.webp",
-      "json": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/dither/errordiffusion/atkinson/atkinson.json"
-    },
-    {
       "id": "dither/halftone/dotmatrix/dotmatrix",
       "name": "DITHER/Halftone/DotMatrix",
       "author": "JaimELegor",
