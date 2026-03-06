@@ -1,5 +1,8 @@
 name: Update Filter Index
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [main]
