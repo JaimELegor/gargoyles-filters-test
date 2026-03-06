@@ -1,0 +1,17 @@
+{
+  "name": "DISTORT/ChromaticAberration",
+  "author": "JaimELegor",
+  "version": "1.0.0",
+  "description": "Displaces the red and blue channels horizontally in opposite directions, leaving the green channel in place.\\n\\nSimulates the optical fringing produced by lenses that fail to focus all wavelengths to the same point — a common artifact in cheap optics, anamorphic lenses, and VHS footage.",
+  "params": {
+    "shift": {
+      "value": 4,
+      "min": 0,
+      "max": 30,
+      "step": 1
+    }
+  },
+  "processFunc": "(img, r, g, b, a, x, y, ...params) => {\n  const [shift] = params;\n  const w = img.width;\n  const rIdx = 4 * (y * w + Math.min(x + shift, w - 1));  \n  const bIdx = 4 * (y * w + Math.max(x - shift, 0));  \n  const rr = img.pixels[rIdx];  \n  const bb = img.pixels[bIdx + 2];\n  return [rr, g, bb, a];\n}",
+  "shader": "",
+  "createdAt": "2026-03-06T19:44:04.732Z"
+}
