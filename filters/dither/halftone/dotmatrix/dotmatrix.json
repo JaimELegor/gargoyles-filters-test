@@ -1,0 +1,29 @@
+{
+  "name": "DITHER/Halftone/DotMatrix",
+  "author": "JaimELegor",
+  "version": "1.0.0",
+  "description": "Simulates a dot matrix halftone pattern by mapping pixel brightness to dot size within a regular grid.\n\nEach cell in the grid is sampled at its center to determine the local average brightness.\nDots grow or shrink proportionally bright areas produce small dots, dark areas produce large ones\nreproducing the ink density illusion used in offset printing and newsprint reproduction.",
+  "params": {
+    "cellsize": {
+      "value": 6,
+      "min": 2,
+      "max": 20,
+      "step": 1
+    },
+    "invert": {
+      "value": 0,
+      "min": 0,
+      "max": 1,
+      "step": 0.5
+    },
+    "blend": {
+      "value": 0.5,
+      "min": 0,
+      "max": 1,
+      "step": 0.05
+    }
+  },
+  "processFunc": "(img, r, g, b, a, x, y, ...params) => {\n    const [cellSize, invert, blend] = params;\n    const index = (x, y) => 4 * (x + y * img.width);\n\n    const cellX = Math.floor(x / cellSize) * cellSize;\n    const cellY = Math.floor(y / cellSize) * cellSize;\n\n    let sum = 0;\n    let count = 0;\n    for (let cy = 0; cy < cellSize; cy++) {\n      for (let cx = 0; cx < cellSize; cx++) {\n        const px = cellX + cx;\n        const py = cellY + cy;\n        if (px >= img.width || py >= img.height) continue;\n        const i = index(px, py);\n        sum += (img.pixels[i] + img.pixels[i + 1] + img.pixels[i + 2]) / 3;\n        count++;\n      }\n    }\n\n    const avg = sum / count;\n    const radius = (1 - avg / 255) * (cellSize / 2);\n    const dx = (x - (cellX + cellSize / 2));\n    const dy = (y - (cellY + cellSize / 2));\n    const dist = Math.sqrt(dx * dx + dy * dy);\n\n    let patternColor = invert ? 255 : 0;\n    if (dist < radius) patternColor = invert ? 0 : 255;\n\n    // Blend original color with pattern\n    img.pixels[index(x, y)]     = r * blend + patternColor * (1 - blend);\n    img.pixels[index(x, y) + 1] = g * blend + patternColor * (1 - blend);\n    img.pixels[index(x, y) + 2] = b * blend + patternColor * (1 - blend);\n  }",
+  "shader": "precision mediump float;\nuniform sampler2D tex;\nuniform vec2 resolution;\nuniform float cellSize;\nuniform float invert;\nuniform float blend;\nvarying vec2 vTexCoord;\n\nvoid main() {\n  vec2 uv = vTexCoord * resolution;\n  vec2 cellUV = floor(uv / cellSize) * cellSize + cellSize * 0.5;\n  vec3 color = texture2D(tex, uv / resolution).rgb;\n  float gray = (color.r + color.g + color.b) / 3.0;\n  float radius = (1.0 - gray) * (cellSize * 0.5);\n  float dist = length(uv - cellUV);\n  float c = step(dist, radius);\n  c = invert > 0.5 ? 1.0 - c : c;\n\n  vec3 finalColor = color * blend + vec3(c) * (1.0 - blend);\n  gl_FragColor = vec4(finalColor, 1.0);\n}",
+  "createdAt": "2026-03-06T17:53:57.107Z"
+}
