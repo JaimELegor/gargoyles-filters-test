@@ -1,0 +1,47 @@
+{
+  "name": "COLOR/Tone/Duotone",
+  "author": "JaimELegor",
+  "version": "1.0.0",
+  "description": "Maps pixel luminance to a gradient between two colors, replacing the full tonal range with a two-color palette.\n\nEach pixel's brightness is computed from its RGB channels using standard luminance weights,\nthen used to interpolate between a shadow color and a highlight color \nproducing the high-contrast, stylized look common in screen printing and poster design.",
+  "params": {
+    "shadowr": {
+      "value": 0,
+      "min": 0,
+      "max": 255,
+      "step": 1
+    },
+    "shadowg": {
+      "value": 0,
+      "min": 0,
+      "max": 255,
+      "step": 1
+    },
+    "shadowb": {
+      "value": 0,
+      "min": 0,
+      "max": 255,
+      "step": 1
+    },
+    "highlightr": {
+      "value": 255,
+      "min": 0,
+      "max": 255,
+      "step": 1
+    },
+    "highlightg": {
+      "value": 255,
+      "min": 0,
+      "max": 255,
+      "step": 1
+    },
+    "highlightb": {
+      "value": 255,
+      "min": 0,
+      "max": 255,
+      "step": 1
+    }
+  },
+  "processFunc": "(img, r, g, b, a, x, y, ...params) => {\n    const [shadowr, shadowg, shadowb, highlightr, highlightg, highlightb] = params;\n    const i = 4 * (x + y * img.width);\n    const gray = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;\n    const mix = (c1, c2, t) => c1 * (1 - t) + c2 * t;\n    img.pixels[i]     = mix(shadowr, highlightr, gray);\n    img.pixels[i + 1] = mix(shadowg, highlightg, gray);\n    img.pixels[i + 2] = mix(shadowb, highlightb, gray);\n  }",
+  "shader": "precision mediump float;\nuniform sampler2D tex;\nuniform vec2 resolution;\nuniform vec3 shadowColor;\nuniform vec3 highlightColor;\nvarying vec2 vTexCoord;\n\nvoid main() {\n  vec4 color = texture2D(tex, vTexCoord);\n  float gray = dot(color.rgb, vec3(0.2126, 0.7152, 0.0722));\n  vec3 c = mix(shadowColor, highlightColor, gray);\n  gl_FragColor = vec4(c, color.a);\n}",
+  "createdAt": "2026-03-06T18:04:54.828Z"
+}
