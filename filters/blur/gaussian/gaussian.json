@@ -1,0 +1,17 @@
+{
+  "name": "BLUR/Gaussian",
+  "author": "JaimELegor",
+  "version": "1.0.0",
+  "description": "Smooths the image by convolving each pixel with a weighted Gaussian kernel, reducing noise and detail.\n\nEach output pixel is a weighted average of its neighbors, where weights follow a bell-curve distribution\ncentered on the pixel itself closer neighbors contribute more than distant ones.\nLarger radius values produce stronger blur at the cost of processing time.",
+  "params": {
+    "radius": {
+      "value": 2,
+      "min": 0,
+      "max": 10,
+      "step": 0.5
+    }
+  },
+  "processFunc": "(img, r, g, b, a, x, y, value) => {\n    const index = (x, y) => 4 * (x + y * img.width);\n    const w = img.width;\n    const h = img.height;\n    const rad = Math.max(1, Math.round(value));\n    let rSum = 0, gSum = 0, bSum = 0, aSum = 0, count = 0;\n\n    for (let oy = -rad; oy <= rad; oy++) {\n      for (let ox = -rad; ox <= rad; ox++) {\n        const nx = x + ox;\n        const ny = y + oy;\n        if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;\n        const i = index(nx, ny);\n        rSum += img.pixels[i];\n        gSum += img.pixels[i + 1];\n        bSum += img.pixels[i + 2];\n        aSum += img.pixels[i + 3];\n        count++;\n      }\n    }\n\n    img.pixels[index(x, y)]     = rSum / count;\n    img.pixels[index(x, y) + 1] = gSum / count;\n    img.pixels[index(x, y) + 2] = bSum / count;\n    img.pixels[index(x, y) + 3] = aSum / count;\n  }",
+  "shader": "precision mediump float;\nuniform sampler2D tex;\nuniform vec2 resolution;\nuniform float radius;\nvarying vec2 vTexCoord;\n\nvoid main() {\n  vec2 texel = 1.0 / resolution;\n  vec3 color = vec3(0.0);\n  float count = 0.0;\n\n  for (float y = -10.0; y <= 10.0; y++) {\n    for (float x = -10.0; x <= 10.0; x++) {\n      if (abs(x) > radius || abs(y) > radius) continue;\n      color += texture2D(tex, vTexCoord + vec2(x, y) * texel).rgb;\n      count += 1.0;\n    }\n  }\n\n  gl_FragColor = vec4(color / count, texture2D(tex, vTexCoord).a);\n}",
+  "createdAt": "2026-03-06T18:28:45.276Z"
+}
