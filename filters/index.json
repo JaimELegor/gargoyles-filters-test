@@ -19,6 +19,15 @@
       "json": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/color/tone/duotone/duotone.json"
     },
     {
+      "id": "distort/chromaticaberration/chromaticaberration",
+      "name": "DISTORT/ChromaticAberration",
+      "author": "JaimELegor",
+      "version": "1.0.0",
+      "description": "Displaces the red and blue channels horizontally in opposite directions, leaving the green channel in place.\\n\\nSimulates the optical fringing produced by lenses that fail to focus all wavelengths to the same point — a common artifact in cheap optics, anamorphic lenses, and VHS footage.",
+      "thumbnail": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/distort/chromaticaberration/chromaticaberration-thumbnail.webp",
+      "json": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/distort/chromaticaberration/chromaticaberration.json"
+    },
+    {
       "id": "dither/errordiffusion/atkinson",
       "name": "DITHER/ErrorDiffusion/Atkinson",
       "author": "JaimELegor",
