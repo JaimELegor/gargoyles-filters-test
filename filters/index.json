@@ -1,6 +1,16 @@
 {
   "filters": [
     {
+      "id": "blur/gaussian/gaussian",
+      "name": "BLUR/Gaussian",
+      "author": "JaimELegor",
+      "version": "1.0.0",
+      "description": "Smooths the image by convolving each pixel with a weighted Gaussian kernel, reducing noise and detail.\n\nEach output pixel is a weighted average of its neighbors, where weights follow a bell-curve distribution\ncentered on the pixel itself closer neighbors contribute more than distant ones.\nLarger radius values produce stronger blur at the cost of processing time.",
+      "thumbnail": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/blur/gaussian/gaussian-thumbnail.webp",
+      "json": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/blur/gaussian/gaussian.json"
+    },
+    {
+      "id": "color/tone/duotone/duotone",
       "name": "COLOR/Tone/Duotone",
       "author": "JaimELegor",
       "version": "1.0.0",
@@ -9,6 +19,7 @@
       "json": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/color/tone/duotone/duotone.json"
     },
     {
+      "id": "dither/errordiffusion/atkinson",
       "name": "DITHER/ErrorDiffusion/Atkinson",
       "author": "JaimELegor",
       "version": "1.0.0",
@@ -17,6 +28,7 @@
       "json": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/dither/errordiffusion/atkinson.json"
     },
     {
+      "id": "dither/errordiffusion/atkinson/atkinson",
       "name": "DITHER/ErrorDiffusion/Atkinson",
       "author": "JaimELegor",
       "version": "1.0.0",
@@ -25,6 +37,7 @@
       "json": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/dither/errordiffusion/atkinson/atkinson.json"
     },
     {
+      "id": "dither/halftone/dotmatrix/dotmatrix",
       "name": "DITHER/Halftone/DotMatrix",
       "author": "JaimELegor",
       "version": "1.0.0",
