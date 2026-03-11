@@ -1,0 +1,23 @@
+{
+  "name": "DITHER/ErrorDiffusion/Atkinson",
+  "author": "JaimELegor",
+  "version": "1.0.0",
+  "description": "The Atkinson dithering filter is an error-diffusion algorithm developed by Apple programmer Bill Atkinson (creator of MacPaint and HyperCard) originally designed for the classic Macintosh to render grayscale images using only a 1-bit (black and white) palette.",
+  "params": {
+    "levels": {
+      "value": 1,
+      "min": 0.5,
+      "max": 3,
+      "step": 0.1
+    },
+    "spread": {
+      "value": 1,
+      "min": 0,
+      "max": 1,
+      "step": 0.05
+    }
+  },
+  "processFunc": "(img, r, g, b, a, x, y, ...params) => {\n      const [levels, spread] = params;\n      const quantize = (v) => Math.round(levels * v / 255) * (255 / levels);\n      const index2 = (x2, y2) => 4 * (x2 + y2 * img.width);\n      function dither(errR2, errG2, errB2, arr, i, portion2) {\n        if (i < 0 || i >= arr.length) return;\n        arr[i] += errR2 * portion2;\n        arr[i + 1] += errG2 * portion2;\n        arr[i + 2] += errB2 * portion2;\n      }\n      let newR = quantize(r);\n      let newG = quantize(g);\n      let newB = quantize(b);\n      img.pixels[index2(x, y)] = newR;\n      img.pixels[index2(x, y) + 1] = newG;\n      img.pixels[index2(x, y) + 2] = newB;\n      const errR = (r - newR) * spread;\n      const errG = (g - newG) * spread;\n      const errB = (b - newB) * spread;\n      const portion = 1 / 8;\n      dither(errR, errG, errB, img.pixels, index2(x + 1, y), portion);\n      dither(errR, errG, errB, img.pixels, index2(x + 2, y), portion);\n      dither(errR, errG, errB, img.pixels, index2(x - 1, y + 1), portion);\n      dither(errR, errG, errB, img.pixels, index2(x, y + 1), portion);\n      dither(errR, errG, errB, img.pixels, index2(x + 1, y + 1), portion);\n      dither(errR, errG, errB, img.pixels, index2(x, y + 2), portion);\n    }",
+  "shader": "precision mediump float;\nuniform sampler2D tex;\nuniform vec2 resolution;\nuniform float levels;\nvarying vec2 vTexCoord;\n\nfloat quantize(float v, float l) {\n  return floor(v * l) / l;\n}\n\nvoid main() {\n  vec4 color = texture2D(tex, vTexCoord);\n  vec3 c = vec3(\n    quantize(color.r, levels),\n    quantize(color.g, levels),\n    quantize(color.b, levels)\n  );\n  gl_FragColor = vec4(c, color.a);\n}",
+  "createdAt": "2026-03-11T18:35:25.225Z"
+}
