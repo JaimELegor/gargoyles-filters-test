@@ -36,4 +36,5 @@ jobs:
           git config user.email github-actions@github.com
           git add filters/index.json
           git commit -m "Auto-update filter index" || echo "No changes"
+          git pull --rebase origin main
           git push
