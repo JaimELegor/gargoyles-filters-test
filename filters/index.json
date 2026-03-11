@@ -28,6 +28,15 @@
       "json": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/distort/chromaticaberration/chromaticaberration.json"
     },
     {
+      "id": "dither/errordiffusion/atkinson/atkinson",
+      "name": "DITHER/ErrorDiffusion/Atkinson",
+      "author": "JaimELegor",
+      "version": "1.0.0",
+      "description": "The Atkinson dithering filter is an error-diffusion algorithm developed by Apple programmer Bill Atkinson (creator of MacPaint and HyperCard) originally designed for the classic Macintosh to render grayscale images using only a 1-bit (black and white) palette.",
+      "thumbnail": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/dither/errordiffusion/atkinson/atkinson-thumbnail.webp",
+      "json": "https://raw.githubusercontent.com/JaimELegor/gargoyles-filters-test/main/filters/dither/errordiffusion/atkinson/atkinson.json"
+    },
+    {
       "id": "dither/halftone/dotmatrix/dotmatrix",
       "name": "DITHER/Halftone/DotMatrix",
       "author": "JaimELegor",
